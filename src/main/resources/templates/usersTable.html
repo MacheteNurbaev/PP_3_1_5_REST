@@ -1,0 +1,44 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+</head>
+
+<body>
+<table class="table table-red">
+    <thead>
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">LastName</th>
+        <th scope="col">Age</th>
+        <h2>Users Table</h2>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}"/>
+        <td th:text="${user.name}"/>
+        <td th:text="${user.lastName}"/>
+        <td th:text="${user.age}"/>
+        <td style="white-space: nowrap;">
+            <form th:action="@{/delete}" method="post" class="delete-button" style="display: inline-block;">
+                <input type="hidden" name="id" th:value="${user.id}">
+                <button type="submit">Delete</button>
+            </form>
+            <form th:action="@{/goToChangeUser}" method="get" class="delete-button" style="display: inline-block; margin-left: 10px;">
+                <input type="hidden" name="id" th:value="${user.id}">
+                <button type="submit">Change</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>________________________________________________________________</h2>
+<form th:action="@{/goToAddUser}" method="get"  style="display: inline-block; margin-left: 10px;">
+    <input type="hidden" name="id" >
+    <button type="submit">Add User</button>
+</form>
+</body>
+</html>

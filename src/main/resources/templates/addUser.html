@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<h3>Add User :</h3>
+
+<form action="#" th:action="@{/add}" th:object="${user}" method="post">
+    <br>
+    <input type="text" th:field="*{name}" id="name" placeholder="Name">
+    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: crimson"></span>
+
+    <br>
+    <div style="margin-bottom: 20px;"></div>
+    <input type="text" th:field="*{lastName}" id="lastname" placeholder="Last Name">
+    <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color: crimson"></span>
+
+    <br>
+    <div style="margin-bottom: 20px;"></div>
+    <input type="number" th:field="*{age}" id="age" placeholder="Age">
+    <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" style="color: crimson"></span>
+
+    <br>
+    <div style="margin-bottom: 20px;"></div>
+    <input type="submit" value="Add">
+</form>
+
+</body>
+</html>
