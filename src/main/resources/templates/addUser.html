@@ -6,7 +6,7 @@
 <body>
 <h3>Add User :</h3>
 
-<form action="#" th:action="@{/add}" th:object="${user}" method="post">
+<form action="#" th:action="@{/admin/add}" th:object="${user}" method="post">
     <br>
     <input type="text" th:field="*{name}" id="name" placeholder="Name">
     <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: crimson"></span>

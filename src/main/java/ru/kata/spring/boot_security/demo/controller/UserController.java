@@ -26,14 +26,14 @@ public class UserController {
     }
 
 
-    @GetMapping(value = "/")
+    @GetMapping(value = "/admin")
     public String showUsersTable(Model model) {
         model.addAttribute("users", userService.getAllUsers());
 
         return "usersTable";
     }
 
-    @GetMapping(value = "/goToChangeUser")
+    @GetMapping(value = "/admin/goToChangeUser")
     public String goToChangeUser(@RequestParam Long id, Model model) {
         List<User> user = new ArrayList<>();
         user.add(userService.getUser(id));
@@ -42,13 +42,13 @@ public class UserController {
         return "changeUser";
     }
 
-    @GetMapping(value = "/goToAddUser")
+    @GetMapping(value = "/admin/goToAddUser")
     public String goToAddUser(Model model) {
         model.addAttribute("user", new User());
         return "addUser";
     }
 
-    @PostMapping("/add")
+    @PostMapping("/admin/add")
     public String add(@Valid @ModelAttribute User user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "addUser";
@@ -56,23 +56,22 @@ public class UserController {
         }
         model.addAttribute("user", user);
         userService.addUser(user);
-        return "redirect:/";
+        return "redirect:/admin";
     }
 
-    @PostMapping("/delete")
+    @PostMapping("/admin/delete")
     public String delete(@RequestParam Long id) {
         userService.deleteUser(id);
-        return "redirect:/";
+        return "redirect:/admin";
     }
 
-    @PostMapping("/change")
+    @PostMapping("/admin/change")
     public String change(@Valid @ModelAttribute User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "changeUser";
         }
         userService.changeUser(user);
-        return "redirect:/";
+        return "redirect:/admin";
     }
-
 
 }
