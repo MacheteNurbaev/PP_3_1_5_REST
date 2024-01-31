@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.dao;
 
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.model.User;
 
@@ -15,6 +16,7 @@ public class UserDaoImpl implements Dao {
 
     @PersistenceContext
     private EntityManager entityManager;
+
 
     @Override
     public List<User> getAllUsers() {
@@ -60,5 +62,12 @@ public class UserDaoImpl implements Dao {
             throw new EntityNotFoundException();
         }
         return us;
+    }
+
+    @Override
+    public User findUserByName(String username) {
+        return entityManager.createQuery("select u from User u left join fetch u.roles where u.username=:username", User.class)
+                .setParameter("username", username).getSingleResult();
+
     }
 }
