@@ -1,15 +1,14 @@
 package ru.kata.spring.boot_security.demo.model;
 
 
-
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,7 +18,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -31,6 +29,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
+@Validated
 public class User implements UserDetails {
 
     @Id
@@ -109,7 +108,6 @@ public class User implements UserDetails {
     public void setAge(Integer age) {
         this.age = age;
     }
-
 
 
     public List<Role> getRoles() {
