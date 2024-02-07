@@ -2,7 +2,8 @@ package ru.kata.spring.boot_security.demo.dao;
 
 
 import org.springframework.stereotype.Repository;
-import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.models.Role;
+import ru.kata.spring.boot_security.demo.models.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
@@ -11,7 +12,7 @@ import java.util.List;
 
 
 @Repository
-public class UserDaoImpl implements Dao {
+public class UserDaoImpl implements UserDao {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -69,4 +70,8 @@ public class UserDaoImpl implements Dao {
                 .setParameter("username", username).getSingleResult();
 
     }
+
+
+
+
 }

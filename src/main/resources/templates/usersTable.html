@@ -12,6 +12,9 @@
         <th scope="col">Name</th>
         <th scope="col">LastName</th>
         <th scope="col">Age</th>
+        <th scope="col">Username</th>
+        <th scope="col">Password</th>
+        <th scope="col">Roles</th>
         <h2>Users Table</h2>
     </tr>
     </thead>
@@ -21,6 +24,9 @@
         <td th:text="${user.name}"/>
         <td th:text="${user.lastName}"/>
         <td th:text="${user.age}"/>
+        <td th:text="${user.username}"/>
+        <td th:text="${user.password}"/>
+        <td th:each="role : ${user.getRoles()}" th:text="${role.toString()}">
         <td style="white-space: nowrap;">
             <form th:action="@{/admin/delete}" method="post" class="delete-button" style="display: inline-block;">
                 <input type="hidden" name="id" th:value="${user.id}">
