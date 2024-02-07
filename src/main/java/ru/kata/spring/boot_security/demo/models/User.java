@@ -48,9 +48,11 @@ public class User implements UserDetails {
     private Integer age;
 
     @Column(name = "username", unique = true)
+    @NotEmpty(message = "Username cannot be empty")
     private String username;
 
-    @Column(name = "password")
+    @Column(name = "password", unique = true)
+    @NotEmpty(message = "Password cannot be empty")
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
@@ -59,10 +61,12 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
 
-    public User(String name, String lastName, Integer age, List<Role> roles) {
+    public User(String name, String lastName, Integer age, String username, String password, List<Role> roles) {
         this.name = name;
         this.lastName = lastName;
         this.age = age;
+        this.username = username;
+        this.password = password;
         this.roles = roles;
     }
 

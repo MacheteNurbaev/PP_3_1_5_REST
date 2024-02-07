@@ -2,18 +2,14 @@ package ru.kata.spring.boot_security.demo.models;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import java.util.List;
+
 
 @Entity
 @Table(name = "roles")
@@ -25,10 +21,6 @@ public class Role implements GrantedAuthority {
 
     @Column(name = "role")
     private String role;
-
-//    @ManyToMany(mappedBy = "roles")
-//    private List<User> users;
-
 
     public Role(String role) {
         this.role = role;
@@ -57,14 +49,6 @@ public class Role implements GrantedAuthority {
     public String getAuthority() {
         return getRole();
     }
-
-//    public List<User> getUsers() {
-//        return users;
-//    }
-//
-//    public void setUsers(List<User> users) {
-//        this.users = users;
-//    }
 
     @Override
     public String toString() {

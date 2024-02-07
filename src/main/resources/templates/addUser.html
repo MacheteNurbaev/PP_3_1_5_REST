@@ -30,30 +30,9 @@
     <div style="margin-bottom: 20px;"></div>
     <input type="text" th:field="*{password}" id="password" placeholder="Password">
     <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: crimson"></span>
-
-<!--    <br>-->
-<!--    <div style="margin-bottom: 20px;"></div>-->
-<!--    <label>Roles:</label>-->
-<!--    <div th:each="role : ${roles}">-->
-<!--        <input type="checkbox" th:id="${'role_' + role.id}" th:name="selectedRoles" th:value="${role.id}" />-->
-<!--        <label th:for="${'role_' + role.id}" th:text="${role.name}"></label>-->
-<!--        <label>Admin</label>-->
-
-<!--        <br>-->
-<!--        <div style="margin-bottom: 5px;"></div>-->
-<!--        <input type="checkbox" th:id="${'role_' + role.id}" th:name="selectedRoles" th:value="${role.id}" />-->
-<!--        <label th:for="${'role_' + role.id}" th:text="${role.name}"></label>-->
-<!--        <label>User</label>-->
-<!--        <br/>-->
-<!--    </div>-->
-
     <p>
         <label>Roles:
-<!--            <input type="checkbox" name="roles"-->
-<!--                   th:each="role : ${allRoles}"-->
-<!--                   th:text="${role.role}"-->
-<!--                   th:value="${role.getRole()}"-->
-<!--            />-->
+
 
             <div th:each="role : ${allRoles}">
                 <input type="checkbox" id="role" th:value="${role.id}" name="roleId">
@@ -61,12 +40,6 @@
             </div>
         </label>
     </p>
-
-<!--    <label>Roles:</label>-->
-<!--    <div th:each="role : ${allRoles}">-->
-<!--        <input type="checkbox" th:id="${'role_' + role.id}" name="roles" th:value="${role.getRole()}">-->
-<!--        <label th:for="${'role_' + role.id}" th:text="${role.role}"></label>-->
-<!--    </div>-->
 
     <br>
     <input type="submit" value="Add">

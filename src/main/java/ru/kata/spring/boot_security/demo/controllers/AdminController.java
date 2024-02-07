@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
@@ -45,6 +44,7 @@ public class AdminController {
         user.add(userService.getUser(id));
         model.addAttribute("users", user);
         model.addAttribute("user", new User());
+        model.addAttribute("allRoles", roleService.getAllRoles());
         return "changeUser";
     }
 
@@ -56,7 +56,7 @@ public class AdminController {
     }
 
     @PostMapping("/admin/add")
-    public String add(@Valid @ModelAttribute User user, @RequestParam List<Long> roleId, BindingResult bindingResult, Model model) {
+    public String add(@Valid @ModelAttribute User user, @RequestParam List<Long> roleId, BindingResult bindingResult) {
         User us = user;
         us.setPassword(passwordEncoder.encode(user.getPassword()));
         us.setRoles(roleService.getRolesById(roleId));
@@ -64,7 +64,6 @@ public class AdminController {
             return "addUser";
 
         }
-//        model.addAttribute("user", user);
         userService.addUser(us);
         return "redirect:/admin";
     }
@@ -76,9 +75,16 @@ public class AdminController {
     }
 
     @PostMapping("/admin/change")
-    public String change(@Valid @ModelAttribute User user, BindingResult bindingResult) {
+    public String change(@Valid @ModelAttribute User user, @RequestParam List<Long> roleId, BindingResult bindingResult) {
         User us = user;
-        us.setPassword(passwordEncoder.encode(user.getPassword()));
+        us.setRoles(roleService.getRolesById(roleId));
+
+        if (us.getPassword().equals("")) {
+            us.setPassword(userService.getUser(user.getId()).getPassword());
+        } else {
+            us.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
         if (bindingResult.hasErrors()) {
             return "changeUser";
         }

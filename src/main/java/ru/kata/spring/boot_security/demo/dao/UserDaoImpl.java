@@ -2,7 +2,6 @@ package ru.kata.spring.boot_security.demo.dao;
 
 
 import org.springframework.stereotype.Repository;
-import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 
 import javax.persistence.EntityManager;
@@ -50,6 +49,9 @@ public class UserDaoImpl implements UserDao {
         us.setName(user.getName());
         us.setLastName(user.getLastName());
         us.setAge(user.getAge());
+        us.setUsername(user.getUsername());
+        us.setPassword(user.getPassword());
+        us.setRoles(user.getRoles());
         entityManager.flush();
 
 
@@ -70,8 +72,6 @@ public class UserDaoImpl implements UserDao {
                 .setParameter("username", username).getSingleResult();
 
     }
-
-
 
 
 }

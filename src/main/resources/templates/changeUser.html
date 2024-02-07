@@ -12,6 +12,10 @@
         <th scope="col">Name</th>
         <th scope="col">LastName</th>
         <th scope="col">Age</th>
+        <th scope="col">Username</th>
+        <th scope="col">Password</th>
+        <th scope="col">Roles</th>
+
 
     </tr>
     </thead>
@@ -20,6 +24,9 @@
         <td th:text="${user.name}"/>
         <td th:text="${user.lastName}"/>
         <td th:text="${user.age}"/>
+        <td th:text="${user.username}"/>
+        <td th:text="${user.password}"/>
+        <td th:each="role : ${user.getRoles()}" th:text="${role.toString()}">
         <td style="white-space: nowrap;">
         </td>
     </tr>
@@ -42,6 +49,25 @@
     <div style="margin-bottom: 20px;"></div>
     <input type="number" th:field="*{age}" id="age" placeholder="Age">
     <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" style="color: crimson"></span>
+    <br>
+    <div style="margin-bottom: 20px;"></div>
+    <input type="text" th:field="*{username}" id="username" placeholder="User name">
+    <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: crimson"></span>
+
+    <br>
+    <div style="margin-bottom: 20px;"></div>
+    <input type="text" th:field="*{password}" id="password" placeholder="Password">
+    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: crimson"></span>
+    <p>
+        <label>Roles:
+
+
+            <div th:each="role : ${allRoles}">
+                <input type="checkbox" id="role" th:value="${role.id}" name="roleId">
+                <label th:for="role" th:text="${role.role}"></label><br>
+            </div>
+        </label>
+    </p>
 
     <br>
     <div style="margin-bottom: 20px;"></div>
