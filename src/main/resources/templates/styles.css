@@ -1,5 +1,11 @@
 
 .column-background {
-    background-color: #F5F5F5; /* Замените на ваш цвет */
+    background-color: #fdfdfd; /* Замените на ваш цвет */
     height: 100vh;
+}
+
+.custom-btn {
+    width: 200px; /* Ширина кнопки в пикселях */
+    height: 50px; /* Высота кнопки в пикселях */
+    text-align: left;
 }
