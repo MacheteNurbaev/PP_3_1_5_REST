@@ -54,8 +54,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Transactional(readOnly = true)
-    public User findByUserName(String username) throws NonUniqueResultException {
-        return userDao.findUserByName(username);
+    public User findByEmail(String email) throws NonUniqueResultException {
+        return userDao.findUserByEmail(email);
     }
 
 

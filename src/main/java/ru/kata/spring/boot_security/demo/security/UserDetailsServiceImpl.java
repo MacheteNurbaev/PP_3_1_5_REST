@@ -21,18 +21,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         try {
-            User user = userService.findByUserName(username);
+            User user = userService.findByEmail(email);
 
             if (user == null) {
-                throw new UsernameNotFoundException(String.format("User '%s' not found", username));
+                throw new UsernameNotFoundException(String.format("User '%s' not found", email));
             }
 
             return user;
 
         } catch (NonUniqueResultException e) {
-            throw new UsernameNotFoundException("Non-unique result for username: " + username, e);
+            throw new UsernameNotFoundException("Non-unique result for username: " + email, e);
         }
     }
 

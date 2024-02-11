@@ -14,6 +14,7 @@ import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,8 @@ public class AdminController {
 
 
     @GetMapping(value = "/admin")
-    public String showUsersTable(Model model) {
+    public String showUsersTable(Model model, Principal principal) {
+        model.addAttribute("us", userService.findByEmail(principal.getName()));
         model.addAttribute("users", userService.getAllUsers());
 
         return "usersTable";

@@ -47,9 +47,10 @@ public class User implements UserDetails {
     @Max(value = 110, message = "Age cannot be less than 110")
     private Integer age;
 
-    @Column(name = "username", unique = true)
-    @NotEmpty(message = "Username cannot be empty")
-    private String username;
+    @Column(name = "email", unique = true)
+    @NotEmpty(message = "Email cannot be empty")
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "It's not by Email")
+    private String email;
 
     @Column(name = "password", unique = true)
     @NotEmpty(message = "Password cannot be empty")
@@ -61,11 +62,11 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
 
-    public User(String name, String lastName, Integer age, String username, String password, List<Role> roles) {
+    public User(String name, String lastName, Integer age, String email, String password, List<Role> roles) {
         this.name = name;
         this.lastName = lastName;
         this.age = age;
-        this.username = username;
+        this.email = email;
         this.password = password;
         this.roles = roles;
     }
@@ -127,7 +128,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.username;
+        return this.email;
     }
 
     @Override
@@ -150,8 +151,8 @@ public class User implements UserDetails {
         return true;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String email) {
+        this.email = email;
     }
 
     public void setPassword(String password) {
