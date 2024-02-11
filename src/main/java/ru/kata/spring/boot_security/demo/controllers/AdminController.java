@@ -7,8 +7,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
@@ -92,5 +94,11 @@ public class AdminController {
         }
         userService.changeUser(us);
         return "redirect:/admin";
+    }
+
+    @GetMapping("/admin/{userId}")
+    @ResponseBody
+    public User getUserById(@PathVariable("userId") Long userId) {
+        return userService.getUser(userId);
     }
 }
