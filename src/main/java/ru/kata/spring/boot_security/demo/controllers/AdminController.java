@@ -7,18 +7,18 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -39,50 +39,28 @@ public class AdminController {
     public String showUsersTable(Model model, Principal principal) {
         model.addAttribute("us", userService.findByEmail(principal.getName()));
         model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("allRoles", roleService.getAllRoles());
 
         return "usersTable";
     }
 
-    @GetMapping(value = "/admin/goToChangeUser")
-    public String goToChangeUser(@RequestParam Long id, Model model) {
-        List<User> user = new ArrayList<>();
-        user.add(userService.getUser(id));
-        model.addAttribute("users", user);
-        model.addAttribute("user", new User());
-        model.addAttribute("allRoles", roleService.getAllRoles());
-        return "changeUser";
-    }
-
-    @GetMapping(value = "/admin/goToAddUser")
-    public String goToAddUser(Model model) {
-        model.addAttribute("user", new User());
-        model.addAttribute("allRoles", roleService.getAllRoles());
-        return "addUser";
-    }
-
     @PostMapping("/admin/add")
-    public String add(@Valid @ModelAttribute User user, @RequestParam List<Long> roleId, BindingResult bindingResult) {
+    @ResponseBody
+    public void add(@RequestBody User user, BindingResult bindingResult) {
         User us = user;
         us.setPassword(passwordEncoder.encode(user.getPassword()));
-        us.setRoles(roleService.getRolesById(roleId));
-        if (bindingResult.hasErrors()) {
-            return "addUser";
-
-        }
         userService.addUser(us);
-        return "redirect:/admin";
     }
 
     @DeleteMapping("/admin/{userId}")
-    public String delete(@PathVariable Long userId) {
+    public void delete(@PathVariable Long userId) {
         userService.deleteUser(userId);
-        return "redirect:/admin";
     }
 
-    @PostMapping("/admin/change")
-    public String change(@Valid @ModelAttribute User user, @RequestParam List<Long> roleId, BindingResult bindingResult) {
+    @PutMapping("/admin/edit")
+    @ResponseBody
+    public void edit(@Valid @RequestBody User user, BindingResult bindingResult) {
         User us = user;
-        us.setRoles(roleService.getRolesById(roleId));
 
         if (us.getPassword().equals("")) {
             us.setPassword(userService.getUser(user.getId()).getPassword());
@@ -90,16 +68,19 @@ public class AdminController {
             us.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
-        if (bindingResult.hasErrors()) {
-            return "changeUser";
-        }
         userService.changeUser(us);
-        return "redirect:/admin";
     }
 
-    @GetMapping("/admin/{userId}")
+    @GetMapping("/admin/getUser/{userId}")
     @ResponseBody
     public User getUserById(@PathVariable("userId") Long userId) {
         return userService.getUser(userId);
     }
+
+    @GetMapping("/admin/getRole/{roleId}")
+    @ResponseBody
+    public List<Role> getRoleById(@PathVariable Long roleId) {
+        return roleService.getRolesById(roleId);
+    }
+
 }
