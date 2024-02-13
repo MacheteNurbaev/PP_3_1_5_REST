@@ -279,7 +279,7 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
                                     </button>
-                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                    <button type="button" class="btn btn-danger" id="deleteIdUserBtn">Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -424,6 +424,7 @@
         crossorigin="anonymous"></script>
 
 <script>
+    // ------------------Filling Modal Delete
     document.querySelectorAll('.btn-danger').forEach(button => {
         button.addEventListener('click', function () {
             const userId = this.getAttribute('data-user-id');
@@ -449,6 +450,56 @@
                 });
         });
     });
+
+    //--------------------------------- Button Delete
+    document.getElementById('deleteIdUserBtn').addEventListener('click', function () {
+        const userId = document.getElementById('deleteIdModal').value; // Обращаемся к элементу по его id
+        fetch(`/admin/${userId}`, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                // Если запрос выполнен успешно, скрываем модальное окно
+                const modal = document.getElementById('deleteModal');
+                const modalInstance = bootstrap.Modal.getInstance(modal);
+                modalInstance.hide();
+                // Можно также добавить код для обновления страницы или списка пользователей
+            })
+    });
+
+
+    //-------------------------Add New User----------------------
+    document.querySelector('form').addEventListener('submit', function (event) {
+        event.preventDefault(); // Предотвращаем отправку формы по умолчанию
+
+        // Захватываем значения полей формы
+        const firstName = document.getElementById('inputName').value;
+        const lastName = document.getElementById('inputLastName').value;
+        const age = document.getElementById('inputAge').value;
+        const email = document.getElementById('inputEmail').value;
+        const password = document.getElementById('inputPassword').value;
+        const roles = Array.from(document.querySelector('select').selectedOptions).map(option => option.value);
+
+        // Создаем объект пользователя
+        const user = {
+            firstName: firstName,
+            lastName: lastName,
+            age: age,
+            email: email,
+            password: password,
+            roles: roles
+        };
+
+        // Отправляем данные на сервер
+        fetch('/admin/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+    });
+
+
 </script>
 
 </body>

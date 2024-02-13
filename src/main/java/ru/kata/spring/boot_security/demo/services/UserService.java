@@ -14,7 +14,7 @@ import java.util.List;
 public interface UserService {
     List<User> getAllUsers();
 
-    void deleteUser(Long io);
+    void deleteUser(Long id);
 
     void addUser(User user);
 
