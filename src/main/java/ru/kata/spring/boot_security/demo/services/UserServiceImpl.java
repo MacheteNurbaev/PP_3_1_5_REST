@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.services;
 
 import org.hibernate.NonUniqueResultException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserDao;
@@ -14,10 +15,12 @@ import java.util.List;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
+    private final PasswordEncoder passwordEncoder;
     private final UserDao userDao;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
         this.userDao = userDao;
     }
 
@@ -35,13 +38,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addUser(User user) {
+        User us = user;
+        us.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.addUser(user);
 
     }
 
     @Override
     public void changeUser(User user) {
-        userDao.changeUser(user);
+        User us = user;
+
+        if (us.getPassword().equals("")) {
+            us.setPassword(getUser(user.getId()).getPassword());
+        } else {
+            us.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        userDao.changeUser(us);
 
     }
 

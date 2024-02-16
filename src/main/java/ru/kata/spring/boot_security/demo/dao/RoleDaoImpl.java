@@ -21,7 +21,6 @@ public class RoleDaoImpl implements RoleDao {
     }
 
     @Override
-    @Transactional
     public List<Role> getRolesById(Long id) {
         return entityManager.createQuery("SELECT r FROM Role r WHERE r.id IN :id", Role.class)
                 .setParameter("id", id)

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -29,8 +29,10 @@
 <!-----------------------Navbar--------------------------------->
 <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#" th:text="${us.getUsername()} + ' with roles:'"></a>
-        <a class="navbar-brand" href="#" th:each="role : ${us.getRoles()}" th:text="${role.toString()}"></a>
+        <!-- Имя пользователя -->
+        <a class="navbar-brand" id="usernameBrand" href="#"></a>
+        <!-- Роли пользователя -->
+        <div id="rolesBrand"></div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             </ul>
@@ -61,7 +63,7 @@
                     <div class="card-header fw-bold" style="font-size: 20px">About user</div>
                     <div class="card-body">
                         <blockquote class="blockquote mb-0">
-                            <table class="table table-striped text text-start">
+                            <table id="userInformationPage" class="table table-striped text text-start">
                                 <thead>
                                 <tr>
                                     <th scope="col">ID</th>
@@ -73,30 +75,74 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="user : ${us}">
-                                    <td th:text="${user.getId()}">
-                                    <td th:text="${user.getName()}">
-                                    <td th:text="${user.getLastName()}">
-                                    <td th:text="${user.getAge()}">
-                                    <td th:text="${user.getUsername()}">
-                                    <td>
-                                        <span th:each="role : ${user.getRoles()}" th:text="${role.toString() + ' '} "></span>
-                                    </td>
-                                </tr>
+
                                 </tbody>
                             </table>
                         </blockquote>
                     </div>
                 </div>
-
-
-
-
-
             </div>
         </div>
     </div>
 </div>
+
+<script>
+
+    //----------------------Update User Information Table-------------
+    function updateInformationTable() {
+        fetch('/user/user')
+            .then(response => response.json())
+            .then(user => {
+                const tableBody = document.querySelector('#userInformationPage tbody');
+                tableBody.innerHTML = '';
+
+                const us = `
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.lastName}</td>
+                        <td>${user.age}</td>
+                        <td>${user.username}</td>
+                        <td>${user.roles.map(role => role.role).join(' ')}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML = us;
+            })
+    }
+
+
+    //----------------------Update Navbar User------------
+
+    function updateUserDetails(user) {
+        // Обновляем имя пользователя
+        const usernameBrand = document.getElementById('usernameBrand');
+        usernameBrand.textContent = user.username + ' with roles:';
+
+        // Обновляем роли пользователя
+        const rolesBrand = document.getElementById('rolesBrand');
+        rolesBrand.innerHTML = ''; // Очищаем содержимое
+        user.roles.forEach(role => {
+            const roleElement = document.createElement('a');
+            roleElement.classList.add('navbar-brand');
+            roleElement.textContent = role.role;
+            rolesBrand.appendChild(roleElement);
+        });
+    }
+
+    // Функция для получения данных пользователя с сервера и их обновления на странице
+    function fetchAndUpdateUserDetails() {
+        fetch('/user/user') // Отправляем GET запрос на сервер для получения данных
+            .then(response => response.json()) // Преобразуем ответ в JSON
+            .then(user => {
+                updateUserDetails(user); // Обновляем данные пользователя на странице
+            })
+    }
+
+    fetchAndUpdateUserDetails();
+    updateInformationTable();
+
+
+</script>
 
 
 <!-- Option 1: Bootstrap Bundle with Popper -->
