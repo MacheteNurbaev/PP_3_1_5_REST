@@ -273,8 +273,7 @@
                                                     <select class="form-select" multiple
                                                             aria-label="пример множественного выбора"
                                                             id="editRolesModal" size="2">
-                                                        <!--                                                        <option th:each="role : ${allRoles}" th:value="${role.id}"-->
-                                                        <!--                                                                th:text="${role.role}"></option>-->
+
                                                     </select>
                                                 </form>
                                             </div>
@@ -378,29 +377,49 @@
         const email = document.getElementById('inputEmail').value;
         const password = document.getElementById('inputPassword').value;
         const roles = Array.from(document.getElementById('selectRoles').selectedOptions).map(option => option.value);
+        if(roles.length === 0) {
+            const user = {
+                name: name,
+                lastName: lastName,
+                age: age,
+                username: email,
+                password: password,
+                roles: roles
+            }
+            fetch('/admin/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(user)
+            })
+
+        } else {
+            fetch(`/admin/getRole/${roles}`)
+                .then(response => response.json())
+                .then(role => {
+                    const user = {
+                        name: name,
+                        lastName: lastName,
+                        age: age,
+                        username: email,
+                        password: password,
+                        roles: role
+                    };
 
 
-        fetch(`/admin/getRole/${roles}`)
-            .then(response => response.json())
-            .then(role => {
-                const user = {
-                    name: name,
-                    lastName: lastName,
-                    age: age,
-                    username: email,
-                    password: password,
-                    roles: role
-                };
+                    fetch('/admin/add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(user)
+                    })
+                });
+        }
 
 
-                fetch('/admin/add', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(user)
-                })
-            });
+
         setTimeout(function () {
             window.location.href = '/admin';
             updateTable();
@@ -597,39 +616,52 @@
         const email = document.getElementById('editEmailModal').value;
         const password = document.getElementById('editPasswordModal').value;
         const roles = Array.from(document.getElementById('editRolesModal').selectedOptions).map(option => option.value);
+        if(roles.length === 0) {
+            const user = {
+                id: id,
+                name: name,
+                lastName: lastName,
+                age: age,
+                username: email,
+                password: password,
+                roles: []
+            }
+        } else {
+            fetch(`/admin/getRole/${roles}`)
+                .then(response => response.json())
+                .then(role => {
+                    const user = {
+                        id: id,
+                        name: name,
+                        lastName: lastName,
+                        age: age,
+                        username: email,
+                        password: password,
+                        roles: role
+                    };
 
 
-        fetch(`/admin/getRole/${roles}`)
-            .then(response => response.json())
-            .then(role => {
-                const user = {
-                    id: id,
-                    name: name,
-                    lastName: lastName,
-                    age: age,
-                    username: email,
-                    password: password,
-                    roles: role
-                };
+                    fetch('/admin/edit', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(user)
+                    })
+                }).then(response => {
+                const modal = document.getElementById('editModal');
+                const modalInstance = bootstrap.Modal.getInstance(modal);
+                modalInstance.hide();
+                setTimeout(function () {
+                    updateTable();
+                    updateInformationTable();
+                    fetchAndUpdateUserDetails();
+                }, 200);
+            });
+        }
 
 
-                fetch('/admin/edit', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(user)
-                })
-            }).then(response => {
-            const modal = document.getElementById('editModal');
-            const modalInstance = bootstrap.Modal.getInstance(modal);
-            modalInstance.hide();
-            setTimeout(function () {
-                updateTable();
-                updateInformationTable();
-                fetchAndUpdateUserDetails();
-            }, 200);
-        });
+
     });
 
     updateTable();

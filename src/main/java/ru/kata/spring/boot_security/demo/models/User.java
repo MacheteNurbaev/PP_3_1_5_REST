@@ -60,6 +60,7 @@ public class User implements UserDetails {
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @NotEmpty(message = "Role cannot be empty")
     private List<Role> roles;
 
     public User(String name, String lastName, Integer age, String email, String password, List<Role> roles) {

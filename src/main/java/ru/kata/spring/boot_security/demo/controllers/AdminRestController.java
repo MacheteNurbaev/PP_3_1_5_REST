@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,8 +14,11 @@ import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
+
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+
 
 @RestController
 public class AdminRestController {
@@ -45,9 +49,10 @@ public class AdminRestController {
 
 
     @PostMapping("/admin/add")
-    public void add(@RequestBody User user) {
-        userService.addUser(user);
+    public void add(@Valid @RequestBody User user, BindingResult bindingResult) {
+        userService.addUser(user, bindingResult);
     }
+
 
     @DeleteMapping("/admin/{userId}")
     public void delete(@PathVariable Long userId) {
@@ -55,8 +60,8 @@ public class AdminRestController {
     }
 
     @PutMapping("/admin/edit")
-    public void edit(@RequestBody User user) {
-        userService.changeUser(user);
+    public void edit(@Valid @RequestBody User user, BindingResult bindingResult) {
+        userService.changeUser(user, bindingResult);
     }
 
     @GetMapping("/admin/getUser/{userId}")
