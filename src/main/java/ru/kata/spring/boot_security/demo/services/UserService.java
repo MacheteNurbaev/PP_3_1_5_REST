@@ -11,9 +11,9 @@ public interface UserService {
 
     void deleteUser(Long id);
 
-    void addUser(User user, BindingResult bindingResult);
+    void addUser(User user);
 
-    void changeUser(User user, BindingResult bindingResult);
+    void changeUser(User user);
 
     User getUser(Long id);
 

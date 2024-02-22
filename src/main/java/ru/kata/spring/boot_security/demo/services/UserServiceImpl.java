@@ -5,17 +5,12 @@ import org.hibernate.NonUniqueResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import ru.kata.spring.boot_security.demo.dao.UserDao;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.security.BCPasswordEncoder;
 
-import javax.validation.Valid;
-import java.util.Collections;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 
 
 @Service
@@ -42,55 +37,26 @@ public class UserServiceImpl implements UserService {
 
     }
 
+
     @Override
-    public void addUser(User user, BindingResult bindingResult) {
-        Map<String, String> response = new HashMap<>();
+    public void addUser(User user) {
         User us = user;
 
-        if (bindingResult.hasErrors()) {
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                response.put(error.getField(), error.getDefaultMessage());
-            }
-        } else {
-
-            us.setPassword(bcPasswordEncoder.PaspasswordEncoder().encode(user.getPassword()));
-            userDao.addUser(us);
-            response.put("message", "User added successfully");
-        }
-        for (Map.Entry<String,String> res  : response.entrySet()) {
-            System.out.println("ERROR : Field " + res.getKey() + " " + res.getValue());
-
-        }
-
-
+        us.setPassword(bcPasswordEncoder.PaspasswordEncoder().encode(user.getPassword()));
+        userDao.addUser(us);
     }
 
+
     @Override
-    public void changeUser(User user, BindingResult bindingResult) {
-        Map<String, String> response = new HashMap<>();
+    public void changeUser(User user) {
         User us = user;
 
-        if (bindingResult.hasErrors()) {
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                response.put(error.getField(), error.getDefaultMessage());
-            }
+        if (us.getPassword().equals("")) {
+            us.setPassword(getUser(user.getId()).getPassword());
         } else {
-            if (us.getPassword().equals("")) {
-                us.setPassword(getUser(user.getId()).getPassword());
-            } else {
-                us.setPassword(bcPasswordEncoder.PaspasswordEncoder().encode(user.getPassword()));
-            }
-            userDao.changeUser(us);
-            response.put("message", "User added successfully");
+            us.setPassword(bcPasswordEncoder.PaspasswordEncoder().encode(user.getPassword()));
         }
-        for (Map.Entry<String,String> res  : response.entrySet()) {
-            System.out.println("ERROR : Field" + res.getKey() + "  " + res.getValue());
-
-        }
-
-
-
-
+        userDao.changeUser(us);
     }
 
     @Override
